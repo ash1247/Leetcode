@@ -1,34 +1,41 @@
 use std::collections::HashMap;
+use std::collections::HashSet;
 
 fn main() {
-    let prices = vec![7,1,5,3,6,4];
-    let ans = max_profit_two_pointer(prices);
+    let nums = vec![1,1,1,3,3,4,3,2,4,2];
+    let ans = contains_duplicate_sort(nums);
     println!("{}", ans);
 }
 
-pub fn max_profit_two_pointer(prices: Vec<i32>) -> i32 {
-    let mut max_profit = 0;
-    let mut left_pointer = 0;
-    for right_pointer in 0..prices.len() {
-        if prices[left_pointer] < prices[right_pointer] {
-            let profit = prices[right_pointer] - prices[left_pointer];
-            max_profit = profit.max(max_profit);
-        } else {
-            left_pointer = right_pointer;
+pub fn contains_duplicate_sort(nums: Vec<i32>) -> bool {
+    let mut sorted_nums = nums.clone();
+    sorted_nums.sort_unstable();
+    for index in 1..sorted_nums.len() {
+        if sorted_nums[index - 1] == sorted_nums[index] {
+            return true;
         }
     }
-    return max_profit;
+    return false;
 }
 
-pub fn max_profit_brute_force(prices: Vec<i32>) -> i32 {
-    let mut ans = 0;
-    for index1 in 0..prices.len() {
-        let mut temp_ans = 0;
-        for index2 in (index1 + 1)..prices.len() {
-            let value = prices[index2] - prices[index1];
-            temp_ans = temp_ans.max(value);
+pub fn contains_duplicate_set(nums: Vec<i32>) -> bool {
+    let mut set: HashSet<i32> = HashSet::new();
+    for num in nums {
+        if !set.insert(num) {
+            return true;
         }
-        ans = ans.max(temp_ans);
     }
-    return ans;
+    return false;
 }
+
+pub fn contains_duplicate_hash_map(nums: Vec<i32>) -> bool {
+    let mut hash_map: HashMap<i32, bool> = HashMap::new();
+    for num in nums {
+        if hash_map.contains_key(&num) {
+            return true
+        } 
+        hash_map.insert(num, true);
+    }
+    return false;
+}
+
